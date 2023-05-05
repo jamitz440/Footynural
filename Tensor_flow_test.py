@@ -6,13 +6,14 @@ from keras.models import Sequential
 from keras.layers import Dense
 from io import StringIO
 
-with open('cleaned_data.csv', 'r') as csvfile:
+with open('cleaned_data.csv', 'r', encoding="utf8") as csvfile:
     data = csvfile.read()
+
 
 df = pd.read_csv(StringIO(data), header=None)
 df.columns = ['team1', 'score1', 'score2', 'team2', 'date']
 
-df['outcome'] = np.where(df['score1'] == df['score2'], 0, np.where(df['score1'] > df['score2'], 1, 2))
+df['outcome'] = np.where((df['score1'] + df['score2']) > 2.5, 0, 1)
 
 
 def encode_teams(df):
